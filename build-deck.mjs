@@ -6,7 +6,7 @@
 // Sem dependências e sem rede: o HTML abre direto do disco (file://), offline.
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { validateDeck, validateTheme } from "./lib/validate.mjs";
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
@@ -35,9 +35,16 @@ function parseArgs(argv) {
   return args;
 }
 
+/** Erro de build com a lista de problemas (o CLI imprime; o render.mjs repassa). */
+export class BuildError extends Error {
+  constructor(lines) {
+    super(["Erro:", ...lines.map((l) => "  - " + l)].join("\n"));
+    this.lines = lines;
+  }
+}
+
 function fail(lines) {
-  console.error(["Erro:", ...lines.map((l) => "  - " + l)].join("\n"));
-  process.exit(1);
+  throw new BuildError(lines);
 }
 
 function readJson(file, what) {
@@ -78,15 +85,14 @@ const safeJson = (obj) =>
 
 const escHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
-function main() {
-  const args = parseArgs(process.argv.slice(2));
-  if (args._.length !== 1) fail(["uso: node build-deck.mjs <deck.json> [--theme claro] [--out deck.html]"]);
-  const deckPath = path.resolve(args._[0]);
+/** Gera o deck.html e retorna { out, deck, theme }. Lança BuildError se o deck ou o tema forem inválidos. */
+export function buildDeck(deckFile, opts = {}) {
+  const deckPath = path.resolve(deckFile);
   const deck = readJson(deckPath, "o deck");
   const errors = validateDeck(deck);
   if (errors.length) fail(errors);
 
-  const themeName = args.theme ?? deck.theme ?? "claro";
+  const themeName = opts.theme ?? deck.theme ?? "claro";
   if (!/^[\w-]+$/.test(themeName)) fail([`nome de tema inválido: ${themeName}`]);
   const themeFile = [path.join(ROOT, "themes", `${themeName}.json`), path.join(ROOT, "themes", "local", `${themeName}.json`)].find((f) =>
     fs.existsSync(f),
@@ -125,9 +131,19 @@ ${bundle()}
 </body>
 </html>
 `;
-  const out = path.resolve(args.out ?? path.join(path.dirname(deckPath), "deck.html"));
+  const out = path.resolve(opts.out ?? path.join(path.dirname(deckPath), "deck.html"));
   fs.writeFileSync(out, html);
-  console.log(`ok: ${path.relative(process.cwd(), out)} (${deck.slides.length} slides, tema ${themeName}, ${(html.length / 1024).toFixed(0)} KB)`);
+  return { out, deck, theme: themeName, size: html.length };
 }
 
-main();
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const args = parseArgs(process.argv.slice(2));
+  try {
+    if (args._.length !== 1) fail(["uso: node build-deck.mjs <deck.json> [--theme claro] [--out deck.html]"]);
+    const r = buildDeck(args._[0], { theme: args.theme, out: args.out });
+    console.log(`ok: ${path.relative(process.cwd(), r.out)} (${r.deck.slides.length} slides, tema ${r.theme}, ${(r.size / 1024).toFixed(0)} KB)`);
+  } catch (e) {
+    console.error(e.message);
+    process.exit(1);
+  }
+}

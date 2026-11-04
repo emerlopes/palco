@@ -4,9 +4,16 @@
   "private": true,
   "description": "Apresentações em HTML, vídeos MP4 e slides únicos a partir de um roteiro em JSON.",
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "node build-deck.mjs",
-    "exemplo": "node build-deck.mjs exemplos/status-semanal/deck.json"
+    "exemplo": "node build-deck.mjs exemplos/status-semanal/deck.json",
+    "check": "node render.mjs exemplos/status-semanal/deck.json --check",
+    "video": "node render.mjs exemplos/status-semanal/deck.json --video"
+  },
+  "devDependencies": {
+    "playwright": "1.64.1"
   }
 }

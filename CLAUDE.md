@@ -48,9 +48,19 @@ Uso típico: arquitetura de sistemas, números semanais para a liderança, evolu
 3. Registrar as notas e os 3 piores problemas em `conteudo/<id>/review_log.md`, corrigir e repetir até todas as notas serem 8 ou mais.
 4. `window.palco.warnings` vazio, sem erro no console, determinismo conferido.
 
+## Vídeo
+
+- O vídeo é o deck tocando sozinho: `palco.frame(T)`. Entrada do slide → `hold` parado → transição (faixa neon varrendo a tela em ~1 s, mola sem overshoot). Nenhum corte seco entre slides.
+- Com trilha, cada slide dura compassos inteiros (a timeline arredonda) e cada troca tem um sopro: mudança de slide no tempo forte.
+- Trilha só sintetizada em código (`lib/audio/score.mjs`) ou fornecida pelo usuário. Nunca baixar música. Loudness final −14 LUFS medido no MP4.
+- O vídeo precisa funcionar sem som. O agente não ouve: a sincronia é conferida pela grade e o loudness, pela medição.
+- Final: 60 fps, 4 subquadros (motion blur), H.264 yuv420p CRF 16, BT.709. Rascunho: 30 fps, 960×540.
+
 ## Lições (Fase 1, 2026-11-04)
 
 - Tamanhos de valores e rótulos são igualados no grupo (`fitGroup`): reduzir só um cartão quebra a hierarquia.
 - Rótulo de conexão entre colunas vizinhas precisa de espaço: o diagrama deixa 132 px entre nós quando há rótulos; rótulo de conexão com cotovelo vai no trecho vertical.
 - Na impressão, os pacotes somem (ficariam parados no meio da seta).
+- Na transição, o slide que sai fica parado: deslizá-lo mostrava uma faixa cinza na borda direita.
+- Com 2 subquadros a faixa neon da transição aparece duplicada; 4 é o mínimo.
 - A janela do apresentador é escrita direto pelo deck (`window.open` de `about:blank`): funciona em `file://` sem servidor.

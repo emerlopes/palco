@@ -77,6 +77,20 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* Transição do vídeo: a faixa neon varre a tela e revela o slide seguinte. */
+.wipe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 28px;
+  z-index: 2;
+  opacity: 0;
+  background: linear-gradient(180deg, var(--c-accent-light) 0%, var(--c-accent) 55%, var(--c-accent-deep) 100%);
+  box-shadow: 0 0 40px 6px var(--c-accent-glow);
+  pointer-events: none;
+}
+
 /* ---------- Cabeçalho ---------- */
 .head {
   flex: none;
@@ -502,6 +516,10 @@ body {
 .is-render .hint {
   display: none;
 }
+/* PNG de slide único: sem pacotes (ficariam parados no meio da seta). */
+.is-still .packet {
+  display: none;
+}
 
 /* ---------- Impressão / PDF: um slide por página, estado final ---------- */
 @page {
@@ -532,6 +550,7 @@ body {
     break-after: auto;
   }
   .sr-live,
+  .wipe,
   .packet {
     display: none;
   }

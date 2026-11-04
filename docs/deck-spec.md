@@ -10,8 +10,9 @@ O build valida tudo isto e para com mensagens em pt-BR apontando o campo (`slide
 | `footer` | não | Texto do rodapé de todos os slides |
 | `theme` | não | Nome do tema em `themes/` ou `themes/local/` (padrão `claro`) |
 | `slides` | sim | Lista de slides, na ordem |
+| `video` | não | `hold` (segundos parado depois da animação, padrão 3), `music` (`nenhuma` ou `suave`), `bpm` (padrão 120) |
 
-Campos comuns a todo slide: `type`, `title` (com no máximo um `[[destaque]]`), `kicker` (rótulo curto acima do título), `subtitle`, `notes` (notas do apresentador, aparecem só na janela do apresentador).
+Campos comuns a todo slide: `type`, `title` (com no máximo um `[[destaque]]`), `kicker` (rótulo curto acima do título), `subtitle`, `notes` (notas do apresentador, aparecem só na janela do apresentador), `hold` (segundos parado no vídeo, sobrepõe `video.hold`).
 
 ## `title`: capa ou abertura de seção
 

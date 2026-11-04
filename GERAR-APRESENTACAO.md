@@ -11,7 +11,7 @@ Em `conteudo/<AAAA-MM-DD>-<id>/` (fora do git):
 - `deck.json`: o roteiro;
 - `deck.html`: a apresentação, um arquivo só, que abre offline em qualquer navegador;
 - `review_log.md`: notas da crítica e o que mudou;
-- `contact.png`: folha de contato dos slides.
+- `out/check/contact.png`: folha de contato dos slides.
 
 ## Passo 1: roteiro
 
@@ -32,17 +32,17 @@ Corrigir todos os erros de validação. Tema da empresa: `--theme <nome>` (arqui
 
 ## Passo 3: conferência visual
 
-Abrir com Playwright em 1920×1080, `?render`, e para cada slide renderizar o estado final (`palco.seek(i, palco.duration(i) + 2)`) e dois instantes da entrada. Montar a folha de contato:
-
 ```bash
-ffmpeg -y -pattern_type glob -i 'shots/*.png' -vf "scale=640:-1,tile=3x4" -frames:v 1 conteudo/AAAA-MM-DD-ID/contact.png
+node render.mjs conteudo/AAAA-MM-DD-ID/deck.json --check
 ```
 
-Ler `window.palco.warnings` (precisa estar vazio) e os erros do console. Fazer a crítica do `CLAUDE.md` até todas as notas serem 8 ou mais.
+Gera `out/check/contact.png` (uma linha por slide: 0,5 s, 1,2 s e estado final) e imprime os avisos de layout, os erros da página e o teste de determinismo. Os três precisam sair limpos (código de saída 0). **Olhar** a folha de contato e fazer a crítica do `CLAUDE.md` até todas as notas serem 8 ou mais.
 
 ## Passo 4: entrega
 
 Relatório curto: caminho do `deck.html`, atalhos (→ ← avançar e voltar, F tela cheia, P apresentador, R repetir), notas finais da crítica e o que não foi conferido.
+
+Vídeo do mesmo deck: `GERAR-VIDEO.md`. Slide avulso em PNG: `GERAR-SLIDE.md`.
 
 Para PDF: abrir o `deck.html` no Chrome, Imprimir → Salvar como PDF, com "Gráficos de plano de fundo" ligado. Sai um slide por página, no estado final.
 

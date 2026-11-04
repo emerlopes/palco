@@ -2,6 +2,7 @@
   "title": "Plataforma de Pagamentos: status da semana 44",
   "footer": "Plataforma de Pagamentos · Status semanal · Exemplo fictício",
   "theme": "claro",
+  "video": { "music": "suave", "hold": 3 },
   "slides": [
     {
       "type": "title",
