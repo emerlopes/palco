@@ -1,0 +1,12 @@
+{
+  "name": "palco",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Apresentações em HTML, vídeos MP4 e slides únicos a partir de um roteiro em JSON.",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node build-deck.mjs",
+    "exemplo": "node build-deck.mjs exemplos/status-semanal/deck.json"
+  }
+}

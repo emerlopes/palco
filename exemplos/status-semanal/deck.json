@@ -1,0 +1,70 @@
+{
+  "title": "Plataforma de Pagamentos: status da semana 44",
+  "footer": "Plataforma de Pagamentos · Status semanal · Exemplo fictício",
+  "theme": "claro",
+  "slides": [
+    {
+      "type": "title",
+      "kicker": "Status semanal · Semana 44",
+      "title": "Plataforma de [[Pagamentos]]",
+      "subtitle": "Números da semana, arquitetura do novo fluxo e próximos marcos.",
+      "meta": "28 out a 3 nov de 2026 · Squad Checkout",
+      "notes": "Abrir com o contexto: semana de pico por causa da campanha. Três blocos: números, arquitetura e roadmap."
+    },
+    {
+      "type": "kpi",
+      "kicker": "Números da semana",
+      "title": "Volume subiu e a [[latência]] caiu",
+      "compareLabel": "vs. semana 43",
+      "items": [
+        { "label": "Transações", "value": 1284530, "prev": 1198220, "format": "int" },
+        { "label": "Disponibilidade", "value": 99.97, "prev": 99.91, "goal": 99.95, "format": "pct", "decimals": 2 },
+        { "label": "Latência p95", "value": 182, "prev": 214, "goal": 200, "better": "down", "format": "ms" },
+        { "label": "Volume processado", "value": 4718250000, "prev": 4391200000, "format": "brl", "compact": true }
+      ],
+      "source": "Fonte: painel de observabilidade, semana 44. Dados fictícios para exemplo.",
+      "notes": "Destacar a latência: a fila nova tirou o pico do horário do almoço. Disponibilidade acima da meta pela terceira semana."
+    },
+    {
+      "type": "diagram",
+      "kicker": "Arquitetura",
+      "title": "O novo fluxo passa por uma [[fila de eventos]]",
+      "cols": 4,
+      "rows": 3,
+      "groups": [{ "label": "Nuvem privada", "from": [1, 0], "to": [3, 2] }],
+      "nodes": [
+        { "id": "app", "label": "App", "sub": "iOS e Android", "icon": "smartphone", "at": [0, 1] },
+        { "id": "gw", "label": "API Gateway", "sub": "Autenticação", "icon": "shield", "at": [1, 1] },
+        { "id": "pay", "label": "Pagamentos", "sub": "Serviço novo", "icon": "zap", "at": [2, 0], "highlight": true },
+        { "id": "queue", "label": "Fila de eventos", "sub": "Assíncrono", "icon": "layers", "at": [2, 1] },
+        { "id": "anti", "label": "Antifraude", "sub": "Tempo real", "icon": "lock", "at": [2, 2] },
+        { "id": "db", "label": "Banco", "sub": "Transações", "icon": "database", "at": [3, 0] },
+        { "id": "ext", "label": "Bandeiras", "sub": "Sistema externo", "icon": "globe", "at": [3, 1], "kind": "external" }
+      ],
+      "edges": [
+        { "from": "app", "to": "gw", "label": "HTTPS", "flow": true },
+        { "from": "gw", "to": "pay", "flow": true },
+        { "from": "gw", "to": "anti" },
+        { "from": "pay", "to": "db", "flow": true },
+        { "from": "pay", "to": "queue" },
+        { "from": "queue", "to": "ext", "flow": true },
+        { "from": "anti", "to": "queue", "style": "dashed" }
+      ],
+      "notes": "O app fala só com o gateway. O serviço de Pagamentos é o novo; a fila desacopla a chamada às bandeiras."
+    },
+    {
+      "type": "timeline",
+      "kicker": "Evolução do projeto",
+      "title": "Da descoberta ao [[piloto]] em seis marcos",
+      "items": [
+        { "date": "Jun", "label": "Descoberta", "detail": "Mapa do fluxo atual e gargalos", "status": "done" },
+        { "date": "Jul", "label": "Arquitetura", "detail": "Fila de eventos aprovada", "status": "done" },
+        { "date": "Ago", "label": "MVP", "detail": "Serviço novo em homologação", "status": "done" },
+        { "date": "Out", "label": "Migração", "detail": "30% do tráfego no fluxo novo", "status": "doing" },
+        { "date": "Nov", "label": "Antifraude", "detail": "Integração do score em tempo real", "status": "risk" },
+        { "date": "Dez", "label": "Piloto", "detail": "100% do tráfego e desligar o legado", "status": "next" }
+      ],
+      "notes": "Antifraude em risco: depende da janela de mudança do time parceiro. Pedido para a liderança: priorizar a janela de novembro."
+    }
+  ]
+}

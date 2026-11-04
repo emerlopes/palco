@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+
+# Conteúdo de trabalho: nunca versionar (pode conter dados internos)
+conteudo/
+out/
+
+# Temas privados (marca de empresa, fontes licenciadas)
+themes/local/
+
+# Saídas geradas
+exemplos/**/deck.html

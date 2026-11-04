@@ -1,0 +1,56 @@
+/* Janela do apresentador (aberta com a tecla P). */
+body {
+  margin: 0;
+  background: #14171c;
+  color: #f2f3f5;
+  font: 500 18px/1.5 system-ui, sans-serif;
+}
+main {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto auto;
+  gap: 16px;
+  height: 100vh;
+  padding: 28px 32px;
+  box-sizing: border-box;
+}
+.p-top {
+  color: #ff9a4d;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.p-title {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.p-notes {
+  font-size: 26px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow: auto;
+  padding: 20px;
+  border-radius: 12px;
+  background: #1f242c;
+}
+.p-next {
+  color: #aab2bf;
+}
+.p-actions {
+  display: flex;
+  gap: 12px;
+}
+button {
+  flex: 1;
+  min-height: 52px;
+  border: 0;
+  border-radius: 10px;
+  background: #2b313b;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+button:last-child {
+  background: #ff6b00;
+  color: #14171c;
+}
